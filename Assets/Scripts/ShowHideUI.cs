@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class ShowHideUI : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] UIGameObject;
+    // [SerializeField]
+    // private GameObject[] UIGameObject;
 
-    [SerializeField]
-    private int[] UINum;
+    // [SerializeField]
+    // private int[] UINum;
 
-    private Dictionary<GameObject, int> UI;
+    private Dictionary<GameObject, int> UI = new Dictionary<GameObject, int>();
 
     void Awake()
     {
-        for(int i = 0; i < UINum.Length; i++)
-        {
-            UI.Add(UIGameObject[i], UINum[i]);
-        }
+        // for(int i = 0; i < UINum.Length; i++)
+        // {
+        //     UI.Add(UIGameObject[i], UINum[i]);
+        // }
     }
 
     void Start()
