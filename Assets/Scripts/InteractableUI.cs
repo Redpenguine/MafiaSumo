@@ -9,8 +9,8 @@ public class InteractableUI : MonoBehaviour
 
     // void Start()
     // {
-    // //    GameEvents.current.onInteractableObjectTriggerEnter += Show;
-    // //     GameEvents.current.onInteractableObjectTriggerExit += Hide;
+    //     GameEvents.current.onOpenUI += Show;
+    //     GameEvents.current.onCloseUI += Hide;
     //     interactableUI.SetActive(false);
     // }
 
@@ -26,7 +26,7 @@ public class InteractableUI : MonoBehaviour
 
     // private void OnDestroy()
     // {
-    //     // GameEvents.current.onInteractableObjectTriggerEnter -= Show;
-    //     // GameEvents.current.onInteractableObjectTriggerExit -= Hide;
+    //     GameEvents.current.onOpenUI -= Show;
+    //     GameEvents.current.onCloseUI -= Hide;
     // }
 }
