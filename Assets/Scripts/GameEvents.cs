@@ -13,15 +13,15 @@ public class GameEvents : MonoBehaviour
     }
 
     public event Action<int> onOpenUI;
-    public void OpenUI(int id)
+    public void OpenUI(int UIid)
     {
-        onOpenUI?.Invoke(id);
+        onOpenUI?.Invoke(UIid);
     }
 
     public event Action<int> onCloseUI;
-    public void CloseUI(int id)
+    public void CloseUI(int UIid)
     {
-        onCloseUI?.Invoke(id);
+        onCloseUI?.Invoke(UIid);
     }
 
 
