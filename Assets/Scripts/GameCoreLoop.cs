@@ -6,17 +6,30 @@ using UnityEngine.UI;
 public class GameCoreLoop : MonoBehaviour
 {
     public static int RoundMoney = 1000;
+    public static int SabotageRoundCost = 0;
 
     [SerializeField]
     private Text roundMoneyTextUI;
+
+    // public SumoStatsAreaController red;
+    // public SumoStatsAreaController blue;
+
     void Start()
     {
         UpdateUI();
+        // SetStatsSumo();
     }
 
     public void Confirm()
     {
-        GameEvents.current.UpdateUI("Poison");    
+        CountAllSabotageValue();
+        GameEvents.current.UpdateUI("Poison");  
+        GameEvents.current.UpdateUI("Beat"); 
+        GameEvents.current.UpdateUI("Intimidate"); 
+        GameEvents.current.UpdateUI("Curse"); 
+        GameEvents.current.UpdateUI("Bribe"); 
+        GameEvents.current.UpdateUI("Prune mawashi");  
+        
         UpdateUI();
     }
 
@@ -24,4 +37,25 @@ public class GameCoreLoop : MonoBehaviour
     {
         roundMoneyTextUI.text = RoundMoney + " $";
     }
+
+    private void CountAllSabotageValue()
+    {
+        GameEvents.current.SabotageValue();
+        int def = RoundMoney - SabotageRoundCost;
+        if(def >= 0)
+        {
+            RoundMoney = def;
+            
+        }
+        SabotageRoundCost = 0;
+
+    }
+    // public void SetStatsSumo()
+    // {
+    //     var sumosStats = StatsGenerator.GeneratePairSumo();
+
+    //     red.SetNewSumo(sumosStats[0]);
+
+    //     blue.SetNewSumo(sumosStats[1]);
+    // }
 }

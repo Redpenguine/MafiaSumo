@@ -13,8 +13,13 @@ public class SabotageBlueprint : MonoBehaviour
     public int chance;
     public int cost;
 
+    public int sabotageValue = 0;
+
     [HideInInspector]
     public int sliderMaxValue;
+
+    [HideInInspector]
+    public int sabotageDamage;
 
     public Text sabotageUI;
     public Text sliderTextUI;
@@ -22,6 +27,7 @@ public class SabotageBlueprint : MonoBehaviour
     void Start()
     {
         GameEvents.current.onUpdateUI +=UpdateSabotageUI;
+        GameEvents.current.onSabotageValue +=SabotageValue;
         sabotageUI.text = sabotageName + "\nDamage: " + damageType + " " 
                             + damageValue + "\nChance: " + chance + " %" + "\nCost: " + cost + " $";
 
@@ -30,9 +36,15 @@ public class SabotageBlueprint : MonoBehaviour
         
     }
 
+    public void SabotageValue()
+    {
+        GameCoreLoop.SabotageRoundCost += sabotageValue;
+    }
+
     public void SliderValueChange()
     {
-        sliderTextUI.text = (slider.value*cost).ToString() + " $";
+        sabotageValue = (int)(slider.value*cost);
+        sliderTextUI.text = sabotageValue.ToString() + " $";
     }
 
     public void UpdateSabotageUI(string sabotageName)
@@ -42,7 +54,7 @@ public class SabotageBlueprint : MonoBehaviour
             sabotageUI.text = sabotageName + "\nDamage: " + damageType + " " 
                             + damageValue + "\nChance: " + chance + " %" + "\nCost: " + cost + " $";
         }
-       RoundMoneyChange();
+       
        UpdateSliderMaxValue();
     }
 
@@ -51,6 +63,7 @@ public class SabotageBlueprint : MonoBehaviour
         slider.maxValue = GameCoreLoop.RoundMoney/cost;
     }
 
+    
     private void RoundMoneyChange()
     {
         int difference = GameCoreLoop.RoundMoney - (int)(slider.value*cost);
@@ -61,5 +74,6 @@ public class SabotageBlueprint : MonoBehaviour
     private void OnDestroy()
     {
         GameEvents.current.onUpdateUI -=UpdateSabotageUI;
+        GameEvents.current.onSabotageValue -=SabotageValue;
     }
 }

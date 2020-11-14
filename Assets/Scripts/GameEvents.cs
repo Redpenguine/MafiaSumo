@@ -30,6 +30,12 @@ public class GameEvents : MonoBehaviour
         onUpdateUI?.Invoke(UIname);
     }
 
+    public event Action onSabotageValue;
+    public void SabotageValue()
+    {
+        onSabotageValue?.Invoke();
+    }
+
 
 
     
