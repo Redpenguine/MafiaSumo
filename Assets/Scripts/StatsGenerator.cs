@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class StatsGenerator
@@ -34,7 +33,7 @@ public class StatsGenerator
 
         blueSumo = GenerateSumo();
 
-        if (CountPower(redSumo) > CountPower(blueSumo))
+        if (StatsLogicCounters.CountPower(redSumo, maxState) > StatsLogicCounters.CountPower(blueSumo, maxState))
         {
             var temp = redSumo;
             redSumo = blueSumo;
@@ -42,11 +41,5 @@ public class StatsGenerator
         }
 
         return new List<SumoStatsDTO>() { redSumo, blueSumo};
-    }
-
-    public static int CountPower(SumoStatsDTO sumoStats)
-    {
-        var power = sumoStats.PhysicalState * sumoStats.Morale * (1 + sumoStats.Fortune / (2 * maxState));
-        return power;
     }
 }
