@@ -7,17 +7,11 @@ public class StatsSeterTest : MonoBehaviour
     public SumoStatsAreaController red;
     public SumoStatsAreaController blue;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetStats()
     {

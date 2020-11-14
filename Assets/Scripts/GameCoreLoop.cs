@@ -11,13 +11,15 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private Text roundMoneyTextUI;
 
-    // public SumoStatsAreaController red;
-    // public SumoStatsAreaController blue;
+    public SumoStatsDTO red = new SumoStatsDTO();
+    public SumoStatsDTO blue = new SumoStatsDTO();
+    // public static SumoStatsAreaController red;
+    // public static SumoStatsAreaController blue;
 
     void Start()
     {
         UpdateUI();
-        // SetStatsSumo();
+        SetStatsSumo();
     }
 
     public void Confirm()
@@ -50,12 +52,13 @@ public class GameCoreLoop : MonoBehaviour
         SabotageRoundCost = 0;
 
     }
-    // public void SetStatsSumo()
-    // {
-    //     var sumosStats = StatsGenerator.GeneratePairSumo();
 
-    //     red.SetNewSumo(sumosStats[0]);
+    public void SetStatsSumo()
+    {
+        var sumosStats = StatsGenerator.GeneratePairSumo();
 
-    //     blue.SetNewSumo(sumosStats[1]);
-    // }
+        red = sumosStats[0];
+
+        blue = sumosStats[1];
+    }
 }

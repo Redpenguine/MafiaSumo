@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +45,7 @@ public class SabotageBlueprint : MonoBehaviour
     public void SliderValueChange()
     {
         sabotageValue = (int)(slider.value*cost);
+        //SetChanceBySumo();
         sliderTextUI.text = sabotageValue.ToString() + " $";
     }
 
@@ -70,7 +72,34 @@ public class SabotageBlueprint : MonoBehaviour
         if(difference >= 0)
             GameCoreLoop.RoundMoney = difference;
     }
+    public void SetChanceBySumo(SumoStatsDTO sumoStats)
+    {
+        switch (sabotageName)
+        {
+            case SabotageConstants.Poison:
+                chance = sumoStats.PhysicalState / StatsGenerator.maxState * 100;
+                break;
+            case SabotageConstants.Fight:
+                chance = sumoStats.PhysicalState / StatsGenerator.maxState * 100;
+                break;
+            case SabotageConstants.DamageMawashi:
+                chance = sumoStats.MawashiStr / StatsGenerator.maxState * 100;
+                break;
+            case SabotageConstants.Curse:
+                chance = sumoStats.Fortune / StatsGenerator.maxState * 100;
+                break;
+            case SabotageConstants.Intimidation:
+                chance = sumoStats.Morale / StatsGenerator.maxState * 100;
+                break;
+            case SabotageConstants.Bribe:
+                chance = sumoStats.Corruptibility / StatsGenerator.maxState * 100;
+                break;
+            default:
+                throw new Exception("No such sabotage name in list!");
+        }
 
+        UpdateSabotageUI(sabotageName);
+    }
     private void OnDestroy()
     {
         GameEvents.current.onUpdateUI -=UpdateSabotageUI;

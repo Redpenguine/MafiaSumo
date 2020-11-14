@@ -11,6 +11,22 @@ public class SumoStatsAreaController : MonoBehaviour
         SumoStats = sumoStatsDTO;
     }
 
+    void Start()
+    {
+        UpdateSumo();
+        GameEvents.current.onUpdateSumo += UpdateSumo;
+    }
+
+    private void UpdateSumo()
+    {
+        if(this.gameObject.name == "SumoStatsAreaRed")
+        {
+            SumoStats = FindObjectOfType<GameCoreLoop>().red;
+        }
+        else if(this.gameObject.name == "SumoStatsAreaBlue"){
+            SumoStats = FindObjectOfType<GameCoreLoop>().blue;
+        }
+    }
     // Update is called once per frame
     void Update()
     {

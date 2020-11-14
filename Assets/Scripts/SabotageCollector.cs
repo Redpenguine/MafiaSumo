@@ -19,12 +19,13 @@ public class SabotageCollector : MonoBehaviour
         sabotageList = new List<GameObject>();
         for(int i = 0; i < 6; i++)
         {
-            sabotagePrefab.GetComponent<SabotageBlueprint>().sabotageName = sabotagePatternArray[i].sabotageName;
-            sabotagePrefab.GetComponent<SabotageBlueprint>().damageType  = sabotagePatternArray[i].damageType;
-            sabotagePrefab.GetComponent<SabotageBlueprint>().damageValue = sabotagePatternArray[i].damageValue;
-            sabotagePrefab.GetComponent<SabotageBlueprint>().cost = sabotagePatternArray[i].cost;
-            Instantiate(sabotagePrefab, sabotageArea);
-            sabotageList.Add(sabotagePrefab);
+            var instant = Instantiate(sabotagePrefab, sabotageArea);
+            instant.GetComponent<SabotageBlueprint>().sabotageName = sabotagePatternArray[i].sabotageName;
+            instant.GetComponent<SabotageBlueprint>().damageType  = sabotagePatternArray[i].damageType;
+            instant.GetComponent<SabotageBlueprint>().damageValue = sabotagePatternArray[i].damageValue;
+            instant.GetComponent<SabotageBlueprint>().cost = sabotagePatternArray[i].cost;
+            
+            sabotageList.Add(instant);
         }
         
     }

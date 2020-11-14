@@ -36,6 +36,12 @@ public class GameEvents : MonoBehaviour
         onSabotageValue?.Invoke();
     }
 
+    public event Action onUpdateSumo;
+    public void UpdateSumo()
+    {
+        onUpdateSumo?.Invoke();
+    }
+
 
 
     

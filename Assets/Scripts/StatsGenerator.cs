@@ -40,6 +40,10 @@ public class StatsGenerator
             blueSumo = temp;
         }
 
+        redSumo.Name = 0;
+
+        blueSumo.Name = 1;
+        
         return new List<SumoStatsDTO>() { redSumo, blueSumo};
     }
 }
