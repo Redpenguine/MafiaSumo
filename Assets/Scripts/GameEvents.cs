@@ -24,6 +24,12 @@ public class GameEvents : MonoBehaviour
         onCloseUI?.Invoke(UIid);
     }
 
+    public event Action<string> onUpdateUI;
+    public void UpdateUI(string UIname)
+    {
+        onUpdateUI?.Invoke(UIname);
+    }
+
 
 
     
