@@ -17,17 +17,21 @@ public class SabotageCollector : MonoBehaviour
     void Start()
     {
         sabotageList = new List<GameObject>();
-        for(int i = 0; i < 6; i++)
+        foreach (var sabotageName in SabotageConstants.Sabotages)
         {
+            var sabotageBlueprint = sabotagePrefab.GetComponent<SabotageBlueprint>();
+            sabotageBlueprint.sabotageName = sabotageName;
             Instantiate(sabotagePrefab, sabotageArea);
             sabotageList.Add(sabotagePrefab);
         }
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateChances(SumoStatsDTO sumoStats)
     {
-        
+        foreach (var sabotage in sabotageList)
+        {
+            var sabotageBlueprint = sabotage.GetComponent<SabotageBlueprint>();
+            sabotageBlueprint.SetChanceBySumo(sumoStats);
+        }
     }
 }
