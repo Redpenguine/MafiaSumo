@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,12 +30,18 @@ public class SabotageBlueprint : MonoBehaviour
     void Start()
     {
         DamageType();
-        red = FindObjectOfType<GameCoreLoop>().red;
-        blue = FindObjectOfType<GameCoreLoop>().blue;
+        UpdateSumo();
         GameEvents.current.onUpdateUI +=UpdateSabotageUI;
         GameEvents.current.onSabotageValue +=SabotageValue;
+        GameEvents.current.onUpdateSumo += UpdateSumo;
         UpdateSabotageUI();
         
+    }
+
+    private void UpdateSumo()
+    {
+        red = FindObjectOfType<GameCoreLoop>().red;
+        blue = FindObjectOfType<GameCoreLoop>().blue;
     }
 
     private void DamageType()
@@ -77,6 +81,57 @@ public class SabotageBlueprint : MonoBehaviour
     public void SabotageValue()
     {
         GameCoreLoop.SabotageRoundCost += sabotageValue;
+
+        // send sabotage
+        SumoStatsDTO currentSumo = new SumoStatsDTO(); //stubSumo
+
+        if (SabotageUI.currentSumo == 0)
+        {
+            currentSumo = red;
+        }
+        else if (SabotageUI.currentSumo == 1)
+        {
+            currentSumo = blue;
+        }
+
+        switch (damageState)
+        {
+            case SabotagePattern.DamageType.Phisical:
+                currentSumo.PhysicalState = DamageSumo(currentSumo.PhysicalState, damageValue, sabotageValue / cost, chance);
+                break;
+            case SabotagePattern.DamageType.Moral:
+                currentSumo.Morale = DamageSumo(currentSumo.Morale, damageValue, sabotageValue / cost, chance);
+                break;
+            case SabotagePattern.DamageType.Corruptibility:
+                currentSumo.Corruptibility = DamageSumo(currentSumo.Corruptibility, damageValue, sabotageValue / cost, chance);
+                break;
+            case SabotagePattern.DamageType.Mavashi:
+                currentSumo.MawashiStr = DamageSumo(currentSumo.MawashiStr, damageValue, sabotageValue / cost, chance);
+                break;
+            case SabotagePattern.DamageType.Fortune:
+                currentSumo.Fortune = DamageSumo(currentSumo.Fortune, damageValue, sabotageValue / cost, chance);
+                break;
+        }
+    }
+
+    private int DamageSumo(int state, int damage, int times, int chance)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            int randNumber = UnityEngine.Random.Range(0, 100);
+
+            if (randNumber < chance)
+            {
+                state -= damage;
+            }
+        }
+
+        if (state < 0)
+        {
+            state = 1;
+        }
+
+        return state;
     }
 
     public void SliderValueChange()
@@ -170,5 +225,6 @@ public class SabotageBlueprint : MonoBehaviour
     {
         GameEvents.current.onUpdateUI -=UpdateSabotageUI;
         GameEvents.current.onSabotageValue -=SabotageValue;
+        GameEvents.current.onUpdateSumo -= UpdateSumo;
     }
 }
