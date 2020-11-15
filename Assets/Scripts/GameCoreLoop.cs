@@ -26,6 +26,12 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private Text monetTextUI;
 
+    [SerializeField]
+    private Text roundMessageUI;
+
+    [SerializeField]
+    private GameObject badEndUI;
+
     private float redCoeff;
 
     public SumoStatsDTO red = new SumoStatsDTO();
@@ -62,28 +68,32 @@ public class GameCoreLoop : MonoBehaviour
 
     public void StartFight()
     {
-        if(Fight() == 0)
+        if (Fight() == 0)
         {
             int goalCheck = bossMoney + (int)(bossBet * redCoeff);
-            if(goalCheck >= BossMoneyGoal)
+            if (goalCheck >= BossMoneyGoal)
             {
                 Debug.Log("Boss win");
             }
-           bossMoney += (int)(bossBet * redCoeff);
-           UpdateBossMoneyUI(); 
+            bossMoney += (int)(bossBet * redCoeff);
+            UpdateBossMoneyUI();
         }
-        else 
+        else
         {
-           Lives --;
-           Debug.Log("Lives " + Lives);
-           Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
-           bossMoney -= bossBet;
-           UpdateBossMoneyUI();
-           if(Lives == 0)
-           {
-               Debug.Log("Die, finish game");
-           }
+            Lives--;
+            Debug.Log("Lives " + Lives);
+            Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
+            bossMoney -= bossBet;
+            UpdateBossMoneyUI();
+            if (Lives == 0)
+            {
+                Debug.Log("Die, finish game");
+                badEndUI.SetActive(true);
+            }
         }
+
+        roundMessageUI.text = GetMessage();
+
         FinishFight();
         
     }
@@ -94,6 +104,28 @@ public class GameCoreLoop : MonoBehaviour
         GameEvents.current.UpdateAfterFight();
         RoundMoney = 1000;
         //GameEvents.current.UpdateUI();
+    }
+
+    private string GetMessage()
+    {
+        string message = "Ожисточённый бой заканкчиваеться победой...\n";
+
+        string mawashiDown = StatsLogicCounters.CountMawashiLost(red, blue, 20) *
+            StatsLogicCounters.CountMawashiLost(blue, red, 20) == 0 ? "Маваши сорвано" : "";
+
+        if (Fight() == 0)
+        {
+            message += $"Красного сумо {mawashiDown}\n";
+            message += "Бос побеждает и его доверие к тебе растёт \n";
+        }
+        else
+        {
+            message += $"Синего сумо {mawashiDown}\n";
+            message += "Бос проиграл он очень зол \n";
+            message += $"Ты лишаешься пальца, осталось {Lives} \n";
+        }
+
+        return message;
     }
 
     private void UpdateUI()
@@ -130,9 +162,8 @@ public class GameCoreLoop : MonoBehaviour
     {
         Debug.Log("red atack, blue = " + StatsLogicCounters.CountMawashiLost(red, blue, 20));
         Debug.Log("blue atack, red = " + StatsLogicCounters.CountMawashiLost(blue, red, 20));
-        if(StatsLogicCounters.CountPower(red, 20) > StatsLogicCounters.CountPower(blue, 20))
+        if(StatsLogicCounters.CountWiner(red, blue) == 0)
         {
-            
             Debug.Log("StatsLogicCounters.CountPower(red, 20) = " + StatsLogicCounters.CountPower(red, 20));
             Debug.Log("Победил красный");
             return 0;

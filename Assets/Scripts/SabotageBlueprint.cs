@@ -103,7 +103,7 @@ public class SabotageBlueprint : MonoBehaviour
                 currentSumo.Morale = DamageSumo(currentSumo.Morale, damageValue, sabotageValue / cost, chance);
                 break;
             case SabotagePattern.DamageType.Corruptibility:
-                currentSumo.Corruptibility = DamageSumo(currentSumo.Corruptibility, damageValue, sabotageValue / cost, chance);
+                currentSumo.Corruptibility = DamageSumo(currentSumo.Corruptibility, damageValue, sabotageValue / cost, chance) == 1 ? 0 : currentSumo.Corruptibility;
                 break;
             case SabotagePattern.DamageType.Mavashi:
                 currentSumo.MawashiStr = DamageSumo(currentSumo.MawashiStr, damageValue, sabotageValue / cost, chance);
@@ -126,7 +126,7 @@ public class SabotageBlueprint : MonoBehaviour
             }
         }
 
-        if (state < 0)
+        if (state <= 0)
         {
             state = 1;
         }
