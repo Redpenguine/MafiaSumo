@@ -29,6 +29,9 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private Text roundMessageUI;
 
+    [SerializeField]
+    private GameObject badEndUI;
+
     private float redCoeff;
 
     public SumoStatsDTO red = new SumoStatsDTO();
@@ -65,27 +68,28 @@ public class GameCoreLoop : MonoBehaviour
 
     public void StartFight()
     {
-        if(Fight() == 0)
+        if (Fight() == 0)
         {
             int goalCheck = bossMoney + (int)(bossBet * redCoeff);
-            if(goalCheck >= BossMoneyGoal)
+            if (goalCheck >= BossMoneyGoal)
             {
                 Debug.Log("Boss win");
             }
-           bossMoney += (int)(bossBet * redCoeff);
-           UpdateBossMoneyUI(); 
+            bossMoney += (int)(bossBet * redCoeff);
+            UpdateBossMoneyUI();
         }
-        else 
+        else
         {
-           Lives --;
-           Debug.Log("Lives " + Lives);
-           Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
-           bossMoney -= bossBet;
-           UpdateBossMoneyUI();
-           if(Lives == 0)
-           {
-               Debug.Log("Die, finish game");
-           }
+            Lives--;
+            Debug.Log("Lives " + Lives);
+            Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
+            bossMoney -= bossBet;
+            UpdateBossMoneyUI();
+            if (Lives == 0)
+            {
+                Debug.Log("Die, finish game");
+                badEndUI.SetActive(true);
+            }
         }
 
         roundMessageUI.text = GetMessage();
