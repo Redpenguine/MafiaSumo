@@ -15,9 +15,9 @@ public class BetsUI : MonoBehaviour
     private Text coefficientBlueSumo;
 
     [HideInInspector]
-    public float redCoeff = 10;
+    public float redCoeff;
     [HideInInspector]
-    public float blueCoeff = 10;
+    public float blueCoeff;
 
     [SerializeField] private float minRedCoeff = 1.1f;
     [SerializeField] private float maxRedCoeff = 2.4f;
@@ -28,12 +28,16 @@ public class BetsUI : MonoBehaviour
     [SerializeField]
     private int UIId = 0;
 
+    void Awake()
+    {
+        Coefficients();
+    }
     void Start()
     {
         GameEvents.current.onOpenUI += Show;
         GameEvents.current.onCloseUI += Hide;
         GameEvents.current.onUpdateAfterFight += Coefficients;
-        Coefficients();
+        
         betsUI.SetActive(false);
     }
 
@@ -63,8 +67,8 @@ public class BetsUI : MonoBehaviour
 
     private void Coefficients()
     {
-        redCoeff = 10;
-        blueCoeff = 10;
+        redCoeff = Random.Range(minRedCoeff, maxRedCoeff);
+        blueCoeff = Random.Range(minBlueCoeff, maxBlueCoeff);
         while(redCoeff+blueCoeff > sumCoeff)
         {
             redCoeff = Random.Range(minRedCoeff, maxRedCoeff);

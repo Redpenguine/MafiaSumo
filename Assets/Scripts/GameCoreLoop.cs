@@ -6,7 +6,12 @@ using UnityEngine.UI;
 public class GameCoreLoop : MonoBehaviour
 {
     public static int RoundMoney;
+    public static int Lives = 5;
     public static int SabotageRoundCost = 0;
+
+    public int bossMoney = 1000000000;
+    public int BossMoneyGoal = 2000000000;
+    public int bossBet = 100000000;
 
     [SerializeField]
     private int roundMoneyUpd = 1000;
@@ -15,17 +20,32 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private Text roundMoneyTextUI;
 
+    [SerializeField]
+    private Slider slider;
+
+    [SerializeField]
+    private Text monetTextUI;
+
+    private float redCoeff;
+
     public SumoStatsDTO red = new SumoStatsDTO();
     public SumoStatsDTO blue = new SumoStatsDTO();
-    // public static SumoStatsAreaController red;
-    // public static SumoStatsAreaController blue;
 
     void Start()
     {
+        redCoeff = FindObjectOfType<BetsUI>().redCoeff;
         GameEvents.current.onUpdateUI += UpdateUI;
         RoundMoneyUpdate();
         UpdateUI();
         SetStatsSumo();
+        UpdateBossMoneyUI();
+    }
+
+    private void UpdateBossMoneyUI()
+    {
+        slider.maxValue = BossMoneyGoal;
+        slider.value = bossMoney;
+        monetTextUI.text = bossMoney + "$";
     }
 
     private void RoundMoneyUpdate()
@@ -42,7 +62,28 @@ public class GameCoreLoop : MonoBehaviour
 
     public void StartFight()
     {
-        Fight();
+        if(Fight() == 0)
+        {
+            int goalCheck = bossMoney + (int)(bossBet * redCoeff);
+            if(goalCheck >= BossMoneyGoal)
+            {
+                Debug.Log("Boss win");
+            }
+           bossMoney += (int)(bossBet * redCoeff);
+           UpdateBossMoneyUI(); 
+        }
+        else 
+        {
+           Lives --;
+           Debug.Log("Lives " + Lives);
+           Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
+           bossMoney -= bossBet;
+           UpdateBossMoneyUI();
+           if(Lives == 0)
+           {
+               Debug.Log("Die, finish game");
+           }
+        }
         FinishFight();
         
     }
@@ -52,6 +93,7 @@ public class GameCoreLoop : MonoBehaviour
         SetStatsSumo();
         GameEvents.current.UpdateAfterFight();
         RoundMoney = 1000;
+        //GameEvents.current.UpdateUI();
     }
 
     private void UpdateUI()
@@ -84,7 +126,7 @@ public class GameCoreLoop : MonoBehaviour
         GameEvents.current.UpdateSumo();
     }
 
-    private void Fight()
+    private int Fight()
     {
         Debug.Log("red atack, blue = " + StatsLogicCounters.CountMawashiLost(red, blue, 20));
         Debug.Log("blue atack, red = " + StatsLogicCounters.CountMawashiLost(blue, red, 20));
@@ -93,11 +135,13 @@ public class GameCoreLoop : MonoBehaviour
             
             Debug.Log("StatsLogicCounters.CountPower(red, 20) = " + StatsLogicCounters.CountPower(red, 20));
             Debug.Log("Победил красный");
+            return 0;
         }
         else
         {
-            
             Debug.Log("Победил синий");
+            return 1;
+            
         }
         
     }
