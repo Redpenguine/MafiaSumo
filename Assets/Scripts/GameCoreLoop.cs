@@ -26,6 +26,9 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private Text monetTextUI;
 
+    [SerializeField]
+    private Text roundMessageUI;
+
     private float redCoeff;
 
     public SumoStatsDTO red = new SumoStatsDTO();
@@ -84,6 +87,9 @@ public class GameCoreLoop : MonoBehaviour
                Debug.Log("Die, finish game");
            }
         }
+
+        roundMessageUI.text = GetMessage();
+
         FinishFight();
         
     }
@@ -94,6 +100,28 @@ public class GameCoreLoop : MonoBehaviour
         GameEvents.current.UpdateAfterFight();
         RoundMoney = 1000;
         //GameEvents.current.UpdateUI();
+    }
+
+    private string GetMessage()
+    {
+        string message = "Ожисточённый бой заканкчиваеться победой...\n";
+
+        string mawashiDown = StatsLogicCounters.CountMawashiLost(red, blue, 20) *
+            StatsLogicCounters.CountMawashiLost(blue, red, 20) == 0 ? "Маваши сорвано" : "";
+
+        if (Fight() == 0)
+        {
+            message += $"Красного сумо {mawashiDown}\n";
+            message += "Бос побеждает и его доверие к тебе растёт \n";
+        }
+        else
+        {
+            message += $"Синего сумо {mawashiDown}\n";
+            message += "Бос проиграл он очень зол \n";
+            message += $"Ты лишаешься пальца, осталось {Lives} \n";
+        }
+
+        return message;
     }
 
     private void UpdateUI()
