@@ -9,6 +9,7 @@ public class SabotageBlueprint : MonoBehaviour
 {
    
     public string sabotageName;
+    public SabotagePattern.DamageType damageState;
     public string damageType;
     public int damageValue;
     public int chance;
@@ -22,19 +23,55 @@ public class SabotageBlueprint : MonoBehaviour
     [HideInInspector]
     public int sabotageDamage;
 
+    private SumoStatsDTO red;
+    private SumoStatsDTO blue;
+
     public Text sabotageUI;
     public Text sliderTextUI;
     public Slider slider;
     void Start()
     {
+        DamageType();
+        red = FindObjectOfType<GameCoreLoop>().red;
+        blue = FindObjectOfType<GameCoreLoop>().blue;
         GameEvents.current.onUpdateUI +=UpdateSabotageUI;
         GameEvents.current.onSabotageValue +=SabotageValue;
-        sabotageUI.text = sabotageName + "\nDamage: " + damageType + " " 
-                            + damageValue + "\nChance: " + chance + " %" + "\nCost: " + cost + " $";
-
-        UpdateSliderMaxValue();
-
+        UpdateSabotageUI();
         
+    }
+
+    private void DamageType()
+    {
+        switch(damageState)
+        {
+            case SabotagePattern.DamageType.Phisical:
+            damageType = "Phisical";
+            break;
+            case SabotagePattern.DamageType.Moral:
+            damageType = "Moral";
+            break;
+            case SabotagePattern.DamageType.Corruptibility:
+            damageType = "Corruptibility";
+            break;
+            case SabotagePattern.DamageType.Mavashi:
+            damageType = "Mavashi";
+            break;
+            case SabotagePattern.DamageType.Fortune:
+            damageType = "Fortune";
+            break;
+        }
+    }
+
+    private void UpdateSetChanceBySumo()
+    {
+        if(SabotageUI.currentSumo == 0)
+        {
+            SetChanceBySumo(red);
+        }
+        else if(SabotageUI.currentSumo == 1)
+        {
+            SetChanceBySumo(blue);
+        }
     }
 
     public void SabotageValue()
@@ -45,19 +82,19 @@ public class SabotageBlueprint : MonoBehaviour
     public void SliderValueChange()
     {
         sabotageValue = (int)(slider.value*cost);
-        //SetChanceBySumo();
         sliderTextUI.text = sabotageValue.ToString() + " $";
     }
 
-    public void UpdateSabotageUI(string sabotageName)
+    public void UpdateSabotageUI()
     {
-        if(this.sabotageName == sabotageName)
-        {
+        UpdateSliderMaxValue();
+        UpdateSetChanceBySumo();
+        slider.value = 0;
             sabotageUI.text = sabotageName + "\nDamage: " + damageType + " " 
                             + damageValue + "\nChance: " + chance + " %" + "\nCost: " + cost + " $";
-        }
+        
        
-       UpdateSliderMaxValue();
+       
     }
 
     public void UpdateSliderMaxValue()
@@ -72,34 +109,63 @@ public class SabotageBlueprint : MonoBehaviour
         if(difference >= 0)
             GameCoreLoop.RoundMoney = difference;
     }
+
     public void SetChanceBySumo(SumoStatsDTO sumoStats)
     {
+        
         switch (sabotageName)
         {
             case SabotageConstants.Poison:
-                chance = sumoStats.PhysicalState / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.PhysicalState)/(float)StatsGenerator.maxState) * 100f);
                 break;
             case SabotageConstants.Fight:
-                chance = sumoStats.PhysicalState / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.PhysicalState)/(float)StatsGenerator.maxState) * 100f);
                 break;
             case SabotageConstants.DamageMawashi:
-                chance = sumoStats.MawashiStr / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.MawashiStr)/(float)StatsGenerator.maxState) * 100f);
                 break;
             case SabotageConstants.Curse:
-                chance = sumoStats.Fortune / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Fortune)/(float)StatsGenerator.maxState) * 100f);
                 break;
             case SabotageConstants.Intimidation:
-                chance = sumoStats.Morale / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Morale)/(float)StatsGenerator.maxState) * 100f);
                 break;
             case SabotageConstants.Bribe:
-                chance = sumoStats.Corruptibility / StatsGenerator.maxState * 100;
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Corruptibility)/(float)StatsGenerator.maxState) * 100f);
                 break;
             default:
                 throw new Exception("No such sabotage name in list!");
-        }
-
-        UpdateSabotageUI(sabotageName);
+        } 
     }
+
+    public void DamageByType(SumoStatsDTO sumoStats)
+    {
+        
+        switch (sabotageName)
+        {
+            case SabotageConstants.Poison:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.PhysicalState)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            case SabotageConstants.Fight:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.PhysicalState)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            case SabotageConstants.DamageMawashi:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.MawashiStr)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            case SabotageConstants.Curse:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Fortune)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            case SabotageConstants.Intimidation:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Morale)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            case SabotageConstants.Bribe:
+                chance = (int)(((StatsGenerator.maxState - sumoStats.Corruptibility)/(float)StatsGenerator.maxState) * 100f);
+                break;
+            default:
+                throw new Exception("No such sabotage name in list!");
+        } 
+    }
+
     private void OnDestroy()
     {
         GameEvents.current.onUpdateUI -=UpdateSabotageUI;

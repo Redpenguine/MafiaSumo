@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SabotageUI : MonoBehaviour
 {
@@ -8,7 +9,12 @@ public class SabotageUI : MonoBehaviour
     private GameObject sabotageUI;
 
     [SerializeField]
+    private GameObject head;
+
+    [SerializeField]
     private int UIId = 2;
+
+    public static int currentSumo;
 
     void Start()
     {
@@ -32,6 +38,27 @@ public class SabotageUI : MonoBehaviour
             sabotageUI.SetActive(false);
         }
     }
+
+    public void SumoData(int n)
+    {
+         
+        if(n == 0)
+        {
+            currentSumo = n;
+            //head.GetComponent<Text>().text = "Red sumo";
+            head.GetComponent<Image>().color = new Color(255f, 0f, 0f, 100f);
+            GameEvents.current.UpdateUI();
+        }
+
+        if(n == 1)
+        {
+            currentSumo = n;
+            //head.GetComponent<Text>().text = "Blue sumo";
+            head.GetComponent<Image>().color = new Color(0f, 0f, 255f, 100f);
+            GameEvents.current.UpdateUI();
+        }
+    }
+
     
 
     private void OnDestroy()
