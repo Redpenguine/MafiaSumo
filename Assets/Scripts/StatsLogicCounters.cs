@@ -12,8 +12,8 @@ public class StatsLogicCounters
 
     public static int CountMawashiLost(SumoStatsDTO sumoStatsAtk, SumoStatsDTO sumoStatsDef, int maxState)
     {
-        var atkPower = (sumoStatsAtk.PhysicalState * sumoStatsAtk.Morale)/(maxState^2);
-        var defPower = sumoStatsDef.MawashiStr / maxState * (1 + sumoStatsDef.Fortune / (2 * maxState));
+        var atkPower = (float)(sumoStatsAtk.PhysicalState * sumoStatsAtk.Morale)/(maxState^2);
+        var defPower = (float)(sumoStatsDef.MawashiStr / maxState * (1 + sumoStatsDef.Fortune / (float)(2 * maxState)));
         return atkPower>=defPower ? 1 : 0;
     }
 }
