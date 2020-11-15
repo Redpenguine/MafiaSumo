@@ -42,6 +42,12 @@ public class GameEvents : MonoBehaviour
         onUpdateSumo?.Invoke();
     }
 
+    public event Action onUpdateAfterFight;
+    public void UpdateAfterFight()
+    {
+        onUpdateAfterFight?.Invoke();
+    }
+
 
 
     
