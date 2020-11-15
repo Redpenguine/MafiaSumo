@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class GameCoreLoop : MonoBehaviour
 {
-    public static int RoundMoney = 1000;
+    public static int RoundMoney;
+
+    private static int roundMoneyUpd = 1000;
     public static int SabotageRoundCost = 0;
 
     [SerializeField]
@@ -18,21 +20,30 @@ public class GameCoreLoop : MonoBehaviour
 
     void Start()
     {
+        GameEvents.current.onUpdateUI += UpdateUI;
+        RoundMoneyUpdate();
         UpdateUI();
         SetStatsSumo();
+    }
+
+    private void RoundMoneyUpdate()
+    {
+        RoundMoney = roundMoneyUpd;
     }
 
     public void Confirm()
     {
         CountAllSabotageValue();
-        GameEvents.current.UpdateUI("Poison");  
-        GameEvents.current.UpdateUI("Beat"); 
-        GameEvents.current.UpdateUI("Intimidate"); 
-        GameEvents.current.UpdateUI("Curse"); 
-        GameEvents.current.UpdateUI("Bribe"); 
-        GameEvents.current.UpdateUI("Prune mawashi");  
+        GameEvents.current.UpdateUI();  
         
-        UpdateUI();
+    }
+
+    public void StartFight()
+    {
+        Fight();
+        SetNewBets();
+        SetStatsSumo();
+        RoundMoney = 1000;
     }
 
     private void UpdateUI()
@@ -53,6 +64,11 @@ public class GameCoreLoop : MonoBehaviour
 
     }
 
+    public void SetNewBets()
+    {
+        Debug.Log("Матч изменился");
+    }
+
     public void SetStatsSumo()
     {
         var sumosStats = StatsGenerator.GeneratePairSumo();
@@ -60,5 +76,30 @@ public class GameCoreLoop : MonoBehaviour
         red = sumosStats[0];
 
         blue = sumosStats[1];
+
+        GameEvents.current.UpdateSumo();
+    }
+
+    private void Fight()
+    {
+        Debug.Log("red atack, blue = " + StatsLogicCounters.CountMawashiLost(red, blue, 20));
+        Debug.Log("blue atack, red = " + StatsLogicCounters.CountMawashiLost(blue, red, 20));
+        if(StatsLogicCounters.CountPower(red, 20) > StatsLogicCounters.CountPower(blue, 20))
+        {
+            
+            Debug.Log("StatsLogicCounters.CountPower(red, 20) = " + StatsLogicCounters.CountPower(red, 20));
+            Debug.Log("Победил красный");
+        }
+        else
+        {
+            
+            Debug.Log("Победил синий");
+        }
+        
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onUpdateUI -= UpdateUI;
     }
 }

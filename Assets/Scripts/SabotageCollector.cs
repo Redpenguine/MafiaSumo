@@ -21,7 +21,8 @@ public class SabotageCollector : MonoBehaviour
         {
             var instant = Instantiate(sabotagePrefab, sabotageArea);
             instant.GetComponent<SabotageBlueprint>().sabotageName = sabotagePatternArray[i].sabotageName;
-            instant.GetComponent<SabotageBlueprint>().damageType  = sabotagePatternArray[i].damageType;
+            //Debug.Log("sabotageName = " + sabotagePatternArray[i].sabotageName);
+            instant.GetComponent<SabotageBlueprint>().damageState  = sabotagePatternArray[i].damageType;
             instant.GetComponent<SabotageBlueprint>().damageValue = sabotagePatternArray[i].damageValue;
             instant.GetComponent<SabotageBlueprint>().cost = sabotagePatternArray[i].cost;
             
