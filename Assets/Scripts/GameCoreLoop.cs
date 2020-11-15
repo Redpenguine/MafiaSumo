@@ -130,9 +130,8 @@ public class GameCoreLoop : MonoBehaviour
     {
         Debug.Log("red atack, blue = " + StatsLogicCounters.CountMawashiLost(red, blue, 20));
         Debug.Log("blue atack, red = " + StatsLogicCounters.CountMawashiLost(blue, red, 20));
-        if(StatsLogicCounters.CountPower(red, 20) > StatsLogicCounters.CountPower(blue, 20))
+        if(StatsLogicCounters.CountWiner(red, blue) == 0)
         {
-            
             Debug.Log("StatsLogicCounters.CountPower(red, 20) = " + StatsLogicCounters.CountPower(red, 20));
             Debug.Log("Победил красный");
             return 0;
