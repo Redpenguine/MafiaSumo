@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,15 +14,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int sabotageUINum = 2;
 
-    void Start()
+
+    public void Exit()
     {
-        
+        Application.Quit();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartAgain()
     {
-        
+        SceneManager.LoadScene(0);
     }
     public void StartFight()
     {

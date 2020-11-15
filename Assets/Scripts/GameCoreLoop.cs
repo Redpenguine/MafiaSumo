@@ -15,7 +15,6 @@ public class GameCoreLoop : MonoBehaviour
 
     [SerializeField]
     private int roundMoneyUpd = 1000;
-    
 
     [SerializeField]
     private Text roundMoneyTextUI;
@@ -30,7 +29,13 @@ public class GameCoreLoop : MonoBehaviour
     private Text roundMessageUI;
 
     [SerializeField]
+    private GameObject goodEndUI;
+
+    [SerializeField]
     private GameObject badEndUI;
+
+    [SerializeField]
+    private GameObject storyUI;
 
     private float redCoeff;
 
@@ -39,6 +44,10 @@ public class GameCoreLoop : MonoBehaviour
 
     void Start()
     {
+        Lives = 5;
+        storyUI.SetActive(false);
+        goodEndUI.SetActive(false);
+        badEndUI.SetActive(false);
         redCoeff = FindObjectOfType<BetsUI>().redCoeff;
         GameEvents.current.onUpdateUI += UpdateUI;
         RoundMoneyUpdate();
@@ -73,7 +82,7 @@ public class GameCoreLoop : MonoBehaviour
             int goalCheck = bossMoney + (int)(bossBet * redCoeff);
             if (goalCheck >= BossMoneyGoal)
             {
-                Debug.Log("Boss win");
+                goodEndUI.SetActive(true);
             }
             bossMoney += (int)(bossBet * redCoeff);
             UpdateBossMoneyUI();
@@ -108,21 +117,21 @@ public class GameCoreLoop : MonoBehaviour
 
     private string GetMessage()
     {
-        string message = "Ожисточённый бой заканкчиваеться победой...\n";
+        string message = "The fierce battle ends and the winner is...\n";
 
         string mawashiDown = StatsLogicCounters.CountMawashiLost(red, blue, 20) *
-            StatsLogicCounters.CountMawashiLost(blue, red, 20) == 0 ? "Маваши сорвано" : "";
+            StatsLogicCounters.CountMawashiLost(blue, red, 20) == 0 ? "ripping off the opponent's mawashi" : "";
 
         if (Fight() == 0)
         {
-            message += $"Красного сумо {mawashiDown}\n";
-            message += "Бос побеждает и его доверие к тебе растёт \n";
+            message += $"Red sumo {mawashiDown}\n";
+            message += "Boss wins and his trust in you grows (just like money)\n";
         }
         else
         {
-            message += $"Синего сумо {mawashiDown}\n";
-            message += "Бос проиграл он очень зол \n";
-            message += $"Ты лишаешься пальца, осталось {Lives} \n";
+            message += $"Blue sumo {mawashiDown}\n";
+            message += "Boss lost and he is very angry \n";
+            message += $"You are losing your finger, left {Lives} \n";
         }
 
         return message;
