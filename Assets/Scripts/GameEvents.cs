@@ -24,10 +24,10 @@ public class GameEvents : MonoBehaviour
         onCloseUI?.Invoke(UIid);
     }
 
-    public event Action<string> onUpdateUI;
-    public void UpdateUI(string UIname)
+    public event Action onUpdateUI;
+    public void UpdateUI()
     {
-        onUpdateUI?.Invoke(UIname);
+        onUpdateUI?.Invoke();
     }
 
     public event Action onSabotageValue;

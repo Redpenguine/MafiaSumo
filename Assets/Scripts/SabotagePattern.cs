@@ -5,8 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class SabotagePattern
 {
+    public enum DamageType
+    {
+        Phisical,
+        Moral,
+        Corruptibility,
+        Mavashi,
+        Fortune
+    }
     public string sabotageName;
-    public string damageType;
+    public DamageType damageType;
     public int damageValue;
     public int cost;
 }
