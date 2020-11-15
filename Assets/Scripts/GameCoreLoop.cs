@@ -32,6 +32,9 @@ public class GameCoreLoop : MonoBehaviour
     [SerializeField]
     private GameObject badEndUI;
 
+    [SerializeField]
+    private SoundManager SoundManager;
+
     private float redCoeff;
 
     public SumoStatsDTO red = new SumoStatsDTO();
@@ -70,16 +73,19 @@ public class GameCoreLoop : MonoBehaviour
     {
         if (Fight() == 0)
         {
+            SoundManager.SetWinMusic();
             int goalCheck = bossMoney + (int)(bossBet * redCoeff);
             if (goalCheck >= BossMoneyGoal)
             {
                 Debug.Log("Boss win");
+                SoundManager.SetGoodEndMusic();
             }
             bossMoney += (int)(bossBet * redCoeff);
             UpdateBossMoneyUI();
         }
         else
         {
+            SoundManager.SetLostMusic();
             Lives--;
             Debug.Log("Lives " + Lives);
             Debug.Log("redCoeff " + redCoeff + " bossBet * redCoeff" + bossBet * redCoeff);
@@ -87,6 +93,7 @@ public class GameCoreLoop : MonoBehaviour
             UpdateBossMoneyUI();
             if (Lives == 0)
             {
+                SoundManager.SetBadEndMusic();
                 Debug.Log("Die, finish game");
                 badEndUI.SetActive(true);
             }
