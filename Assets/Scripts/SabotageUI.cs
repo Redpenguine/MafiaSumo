@@ -14,6 +14,7 @@ public class SabotageUI : MonoBehaviour
     [SerializeField]
     private int UIId = 2;
 
+   
     public static int currentSumo;
 
     void Start()
@@ -27,14 +28,8 @@ public class SabotageUI : MonoBehaviour
     {
         if(this.UIId == UIId)
         {
-            if(sabotageUI.activeSelf)
-            {
-                sabotageUI.SetActive(false);
-            }
-            else
-            {
-                sabotageUI.SetActive(true);
-            }
+            sabotageUI.SetActive(true);
+            
         }
     }
 
@@ -53,7 +48,7 @@ public class SabotageUI : MonoBehaviour
         {
             currentSumo = n;
             //head.GetComponent<Text>().text = "Red sumo";
-            head.GetComponent<Image>().color = new Color(255f, 0f, 0f, 100f);
+            head.GetComponent<Image>().color = Color.red;
             GameEvents.current.UpdateUI();
         }
 
@@ -61,7 +56,7 @@ public class SabotageUI : MonoBehaviour
         {
             currentSumo = n;
             //head.GetComponent<Text>().text = "Blue sumo";
-            head.GetComponent<Image>().color = new Color(0f, 0f, 255f, 100f);
+            head.GetComponent<Image>().color = Color.blue;
             GameEvents.current.UpdateUI();
         }
     }
