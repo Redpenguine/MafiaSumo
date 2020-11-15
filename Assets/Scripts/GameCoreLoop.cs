@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class GameCoreLoop : MonoBehaviour
 {
     public static int RoundMoney;
-
-    private static int roundMoneyUpd = 1000;
     public static int SabotageRoundCost = 0;
+
+    [SerializeField]
+    private int roundMoneyUpd = 1000;
+    
 
     [SerializeField]
     private Text roundMoneyTextUI;
@@ -41,8 +43,14 @@ public class GameCoreLoop : MonoBehaviour
     public void StartFight()
     {
         Fight();
-        SetNewBets();
+        FinishFight();
+        
+    }
+
+    private void FinishFight()
+    {
         SetStatsSumo();
+        GameEvents.current.UpdateAfterFight();
         RoundMoney = 1000;
     }
 
@@ -64,10 +72,6 @@ public class GameCoreLoop : MonoBehaviour
 
     }
 
-    public void SetNewBets()
-    {
-        Debug.Log("Матч изменился");
-    }
 
     public void SetStatsSumo()
     {

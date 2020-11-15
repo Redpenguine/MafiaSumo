@@ -21,7 +21,14 @@ public class SumoStatsUI : MonoBehaviour
     {
         if(this.UIId == UIId)
         {
-            sumoStatsUI.SetActive(true);
+            if(sumoStatsUI.activeSelf)
+            {
+                sumoStatsUI.SetActive(false);
+            }
+            else
+            {
+                sumoStatsUI.SetActive(true);
+            }
         }
     }
 

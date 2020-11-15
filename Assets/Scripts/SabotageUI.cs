@@ -27,7 +27,14 @@ public class SabotageUI : MonoBehaviour
     {
         if(this.UIId == UIId)
         {
-            sabotageUI.SetActive(true);
+            if(sabotageUI.activeSelf)
+            {
+                sabotageUI.SetActive(false);
+            }
+            else
+            {
+                sabotageUI.SetActive(true);
+            }
         }
     }
 

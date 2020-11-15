@@ -27,7 +27,7 @@ public class SumoStatsAreaController : MonoBehaviour
             SumoStats = FindObjectOfType<GameCoreLoop>().blue;
         }
     }
-    // Update is called once per frame
+    
     void Update()
     {
         SetStats(SumoStats);
